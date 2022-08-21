@@ -15,7 +15,7 @@
 </style>
 </head>
 
-<h2>Collect Credit Card Payment</h2>
+<h2>Credit Card Payment</h2>
 <h2 id="notsecure" style="color:red;"></h2>
 <h2 id="secure" style="color:green;"></h2>
 <h2 id="cardcaptured" style="color:green;"></h2>
@@ -39,7 +39,7 @@
 		<td id="crn"> </td>
 	</tr>
 	<tr>
-		<td><button id="btn2"onclick="SendDigits2_2()">Send Digits</button></td>
+		<td><button id="btn2"onclick="SendDigits2_0()">Send Digits</button></td>
 		<td></td>
 	</tr>
 	<tr>
@@ -98,6 +98,12 @@ const tbl3 = document.getElementById('tbl3');
 tbl3.style.display = 'none';
 const tbl4 = document.getElementById('tbl4');
 tbl4.style.display = 'none';
+var dtmf = "99999"
+var sessionid1 = "999999"
+var sessionid = "999999"
+var GetCRN = ""
+var endpiont = "999999"
+
 
 
 function myfunc() {
@@ -137,11 +143,7 @@ if(window.location.hash) {
 		&SemafoneCrn=34018\
 		&SemafoneSessionID=dpmb-9d7dab40-783e-4120-b69e-19af4e387f9f-49763919\
 		&frameAncestors=http://127.0.0.1:8080/"		
-	var dtmf = "99999"
-	var sessionid1 = "999999"
-	var sessionid = "999999"
-	var GetCRN = ""
-	var endpiont = "999999"
+
 
 	const myHeaders = new Headers();
 	myHeaders.append('Content-Type', 'application/json');
@@ -163,22 +165,7 @@ function wait(ms){
 
 
 	  
-function SendDigits2_1 () {
-	let obj = fetch(url, {
-		method: 'GET',
-		// credentials: 'include',
-		// mode: 'no-cors',
-		origin: 'http://127.0.0.1:8080',
-		headers: myHeaders,
-		})
-		.then(response => response.json())
-		.then(data => {
-			id1 = data.entities[0].id
-			id2 = data.entities[0].participants[3].id
-			Step2()
-		})
-		.catch(err => console.log('Request Failed')); 
-	}
+
 
 
 function GetCRN1() {
@@ -204,14 +191,29 @@ function GetCRN1() {
 	}
 	
 
-	function SendDigits2_2() {
-		btn3.style.display = 'block';
+
+
+
+	function SendDigits2_0 () {
+	let obj = fetch(url, {
+		method: 'GET',
+		// credentials: 'include',
+		// mode: 'no-cors',
+		origin: 'http://127.0.0.1:8080',
+		headers: myHeaders,
+		})
+		.then(response => response.json())
+		.then(data => {
+			id1 = data.entities[0].id
+			id2 = data.entities[0].participants[3].id
+			SendDigits2_1()
+		})
+		.catch(err => console.log('Request Failed')); 
 	}
 
 
-function SendDigits2() {
+function SendDigits2_1() {
 	url2 = "https://api.mypurecloud.com.au/api/v2/conversations/" + id1 + "/participants/" + id2 +"/digits"
-	btn3.style.display = 'block';
 	let obj3 = fetch(url2, {
 		method: 'POST',
 		body: '{"digits": "##' + dtmf + '"}',
@@ -227,6 +229,11 @@ function SendDigits2() {
 		.catch(err => console.log('Request Failed Send DTMF')); 
 
 }
+
+
+function SendDigits2_2() {
+		btn3.style.display = 'block';
+	}
 
 function GoSecure3() {
 	url4 = "https://sandboxapi.secureco.co/V2/semafone/getsecuresession"
@@ -298,6 +305,7 @@ function GoSecure3() {
 
 	function Purchase5() {
 	url6 = "https://sandboxapi.secureco.co/V2/Transactions/purchase"
+	document.querySelector("#secure").innerText = "Conducting Payment"
 	let obj6 = fetch(url6, {
 		method: 'POST',
 		body: '{"SemafoneData": {"crNumber":"' + dtmf + '","sessionId": "' + sessionid + '","endPoint": "' + endpiont + '"},' +
