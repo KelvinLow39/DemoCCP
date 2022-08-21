@@ -1,93 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
-
 <head>
-
 <style>
 
-.form-group{
+.hidearea{
+	display:none	
+}
+.showarea{
+	display:block	
+}
+.PurchaseControl{
 	display:none	
 }
 </style>
-
-
 </head>
+
 <h2>Collect Credit Card Payment</h2>
-<h1 id="notsecure" style="color:red;"></h1>
-<h1 id="secure" style="color:green;"></h1>
-<h1 id="cardcaptured" style="color:green;"></h1>
+<h2 id="notsecure" style="color:red;"></h2>
+<h2 id="secure" style="color:green;"></h2>
+<h2 id="cardcaptured" style="color:green;"></h2>
 
 
-<button onclick="GetCRNStep3()">GetCRN</button>
-<button onclick="GoSecure()">GoSecure</button>
-<button onclick="GetDigits()">GetDigits</button>
-<br>
-<button id="pbtn1" onclick="Purchase()">Purchase1</button>
+<table id="#tbl1">
+	<tr>
+		<td>Card Number</td>
+		<td id="panMasked">   </td>
+	</tr>
+	<tr>
+		<td>Card CCV</td>
+		<td id="ccvMasked">   </td>
+	</tr>
+</table>
 
 
+<table>
+	<tr>
+		<td><button id="#btn1"onclick="GetCRN1()">GetCRN</button></td>
+		<td id="crn"> </td>
+	</tr>
+	<tr>
+		<td><button id="#btn2"onclick="SendDigits2_2()">Send Digits</button></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td><button id="#btn3"onclick="GoSecure3()">GoSecure</button></td>
+		<td id="endpiont">  </td>
+	</tr>
+	<tr>
+		<td><button id="#btn4"onclick="GetDigits4()">GetDigits</button></td>
+		<td id="captureStatus">  </td>
+	</tr>
 
+</table>
 
+<table id = #tbl3>
+	<tr>
+		<td>Amount            $</td>
+		<td><input id="#RequestedAmount" name="RequestedAmount" type="text" value="1000.00"></td>
+	</tr>
+	<tr>
+		<td>Expiry Date</td>
+		<td><input id="#ExpiryDate" name="ExpiryDate" type="text" value="05/2024"></td>
+	</tr>
+	<tr>
+		<td><button id="#btn5" onclick="Purchase5()">Purchase</button></td>
+		<td></td>
+	</tr>
+</table>
 
-
-<main>
-	 <p class="par"></p>
-
-	  <br>
-	  <br>
-	  <div id=ccpBlock class="form-group">
-
-		<input type="button" id="btn1" value="Start Transaction" />
-		  <label for="RequestedAmount">Requested Amount:</label>
-		  <br>
-		  <input class="form-control" id="RequestedAmount" name="RequestedAmount" type="text" value="1000" readonly="readonly">
-		  <br>
-		  <label for="RequestedAmount">Expiry Date (MM/YYYY):</label>
-		  <br>
-		  <input class="form-control" id="RequestedAmount" name="RequestedAmount" type="text" value="05/2025" readonly="readonly">
-		  <br>
-		  <br>
-		  <button onclick="myPurchase()">Submit</button>
-	  </div>
-  </main>
-
-
-
-  <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<div id="crn"></div>
-<div id="sessionid"></div>
-<div id="endpiont"></div>
-<div id="panMask"></div>
-<div id="captureStatus"></div>
-
-<div id="TransactionID"></div>
-<div id="APIResponseMessage"></div>
-
-
+<table id = #tbl4>
+	<tr>
+		<td>Trannsaction Status</td>
+		<td id="paymentstatus">   </td>
+	</tr>
+	<tr>
+		<td>TransactionID</td>
+		<td id="transid">   </td>
+	</tr>
+</table>
 
 
 
 <body>
 <script>
 
-const pbtn1 = document.getElementById('pbtn1');
+const btn5 = document.getElementById('#btn5');
+//btn5.style.display = 'none';
+const btn4 = document.getElementById('#btn4');
+btn4.style.display = 'none';
+const btn3 = document.getElementById('#btn3');
+btn3.style.display = 'none';
+const btn2 = document.getElementById('#btn2');
+btn2.style.display = 'none';
+const tbl1 = document.getElementById('#tbl1');
+tbl1.style.display = 'none';
+const tbl3 = document.getElementById('#tbl3');
+tbl3.style.display = 'none';
+const tbl4 = document.getElementById('#tbl4');
+tbl4.style.display = 'none';
 
-pbtn1.style.display = 'none';
+//<button id="#btn9"onclick="myfunc()">Test</button>
+
+function myfunc() {
+	tbl1.style.display = 'block';
+	document.querySelector("#panMasked").innerText = 'werty'
+	document.querySelector("#captureStatus").innerText = '4242.'
+	document.querySelector("#ccvMasked").innerText = '4242.'
+
+	}
 
 
 
 
-function toShow() {
-    var iframe = document.getElementsByName('CCP');
-    iframe.style.display = 'block';
-    content.innerHTML = iframe;
-}
 
 
 
@@ -136,17 +160,10 @@ function wait(ms){
 }	
 	
 
-function myFunction() {
-  var x = document.getElementById('ccpBlock');
-  if (x.style.display === 'block') {
-    x.style.display = 'none';
-  } else {
-    x.style.display = 'block';
-  }
-}
+
 
 	  
-document.getElementById('btn1').addEventListener('click', function () {
+function SendDigits2_1 () {
 	let obj = fetch(url, {
 		method: 'GET',
 		// credentials: 'include',
@@ -161,10 +178,10 @@ document.getElementById('btn1').addEventListener('click', function () {
 			Step2()
 		})
 		.catch(err => console.log('Request Failed')); 
-	}, false);
+	}
 
 
-function GetCRNStep3() {
+function GetCRN1() {
 	url2 = "https://sandboxapi.secureco.co/V2/semafone/getnextcrn"
 	let obj2 = fetch(url2, {
 		method: 'GET',
@@ -179,15 +196,22 @@ function GetCRNStep3() {
 			theCRN = data.APIData
 			console.log(theCRN)
 			document.querySelector("#crn").innerText = dtmf
+			btn2.style.display = 'block';
+			//myFunction();
 
 			})
 		.catch(err => console.log('Request Failed GetCRNStep3')); 
 	}
 	
 
+	function SendDigits2_2() {
+		btn3.style.display = 'block';
+	}
 
-function SendDigits() {
+
+function SendDigits2() {
 	url2 = "https://api.mypurecloud.com.au/api/v2/conversations/" + id1 + "/participants/" + id2 +"/digits"
+	btn3.style.display = 'block';
 	let obj3 = fetch(url2, {
 		method: 'POST',
 		body: '{"digits": "##' + dtmf + '"}',
@@ -198,22 +222,13 @@ function SendDigits() {
 		.then(data => {
 			console.log('{"digits": "##' + dtmf + '"}')
 			wait(3000);  //7 seconds in milliseconds
-			//Step4()
+			btn3.style.display = 'block';
 		})
 		.catch(err => console.log('Request Failed Send DTMF')); 
 
 }
 
-
-
-
-
-//console.log('before');
-//wait(2000);  //7 seconds in milliseconds
-//console.log('after');
-
-
-function GoSecure() {
+function GoSecure3() {
 	url4 = "https://sandboxapi.secureco.co/V2/semafone/getsecuresession"
 	let obj4 = fetch(url4, {
 		method: 'POST',
@@ -229,24 +244,31 @@ function GoSecure() {
 			if (endpiont.length > 3) {AllSecure()}
 			else {NotSecure()}
 			console.log(endpiont)
-			document.querySelector("#crn").innerText = dtmf
-			document.querySelector("#sessionid").innerText = sessionid
-			document.querySelector("#endpiont").innerText = endpiont
+			//document.querySelector("#crn").innerText = dtmf
+			//document.querySelector("#sessionid").innerText = sessionid
+			//document.querySelector("#endpiont").innerText = endpiont
 		
 		})
 		.catch(err => console.log('Request Failed Step 4'));
 	}
 
-	function AllSecure() 	{document.querySelector("#secure").innerText = "ALL SECURE ENTER CREDIT CARD DIGITS";document.querySelector("#notsecure").innerText = "";}
-	function NotSecure()  	{document.querySelector("#notsecure").innerText = "NOT SECURE";document.querySelector("#secure").innerText = "";}
+	function AllSecure() 	{
+		document.querySelector("#secure").innerText = "ALL SECURE ENTER CREDIT CARD DIGITS"
+		document.querySelector("#notsecure").innerText = ""
+		btn4.style.display = 'block'
+	}
+	function NotSecure()  	{
+		document.querySelector("#notsecure").innerText = "NOT SECURE"
+		document.querySelector("#secure").innerText = ""
+	}
 	function ClearSecure()  {
-		document.querySelector("#notsecure").innerText = "";
-		document.querySelector("#secure").innerText = "";
+		document.querySelector("#notsecure").innerText = ""
+		document.querySelector("#secure").innerText = ""
 	}
 
 
 
-	function GetDigits() {
+	function GetDigits4() {
 	url5 = "https://sandboxapi.secureco.co/V2/semafone/getsecurecarddetails"
 	let obj5 = fetch(url5, {
 		method: 'POST',
@@ -256,20 +278,29 @@ function GoSecure() {
 		})
 		.then(response => response.json())
 		.then(data => {
+			tbl1.style.display = 'block'
 			console.log('Step5')
 			captureStatus = data.APIData.captureStatus
 			panMask = data.APIData.panMask
-			document.querySelector("#panMask").innerText = panMask
+			cvcMask = data.APIData.cvcMask
+			document.querySelector("#panMasked").innerText = panMask
+			document.querySelector("#ccvMasked").innerText = cvcMask
 			document.querySelector("#captureStatus").innerText = captureStatus
 			console.log(captureStatus)
 			console.log(panMask)
-			pbtn1.style.display = 'block'
-			//openRequestedPopup()
+			if (captureStatus === 'COMPLETE') {Carddone()}
+			
 		})
 		.catch(err => console.log('Request Failed getDigits'));
 	}
 
-	function Purchase() {
+	function Carddone() {
+		tbl3.style.display = 'block'
+
+	}
+
+
+	function Purchase5() {
 	url6 = "https://sandboxapi.secureco.co/V2/Transactions/purchase"
 	let obj6 = fetch(url6, {
 		method: 'POST',
@@ -292,19 +323,45 @@ function GoSecure() {
 		.then(data => {
 			console.log('Purchase')
 			TransactionID = data.APIData.TransactionID
-			//APIResponseMessage = data.APIResponseMessage
-			document.querySelector("#TransactionID").innerText = TransactionID
-			document.querySelector("#APIResponseMessage").innerText = APIResponseMessage
+			APIResponseMessage = data.APIResponseMessage
+
 			console.log(TransactionID)
-			//console.log(APIResponseMessage)
+			console.log(APIResponseMessage)
+			if (APIResponseMessage == 'Success') {purchasedone()}
 		})
 		.catch(err => console.log('Request Failed Purchase'));
 	}
 
 
+	function purchasedone() {
+		tbl4.style.display = 'block'
+		tbl1.style.display = 'none'
+		document.querySelector("#transid").innerText = TransactionID
+		document.querySelector("#paymentstatus").innerText = APIResponseMessage
+		tbl3.style.display = 'none'
+	}
+ 
+ 
+/*
+	function myFunction() {
+  		var x = document.querySelector('.PurchaseControl');
+  		x.classList.replace('PurchaseControl', 'showarea');
+ 		if (x.style.display === 'block') {
+		  x.style.display = 'none';
+ 		} 
+		else {
+ 		   x.style.display = 'block';
+ 		}
+	}
 
- 
- 
+	function toShow() {
+		var iframe = document.getElementsByName('CCP');
+		iframe.style.display = 'block';
+		content.innerHTML = iframe;
+	}
+	*/
+
+
 </script>
 </body>
 
