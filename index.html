@@ -21,7 +21,7 @@
 <h2 id="cardcaptured" style="color:green;"></h2>
 
 
-<table id="#tbl1">
+<table id="tbl1">
 	<tr>
 		<td>Card Number</td>
 		<td id="panMasked">   </td>
@@ -35,78 +35,78 @@
 
 <table>
 	<tr>
-		<td><button id="#btn1"onclick="GetCRN1()">GetCRN</button></td>
+		<td><button id="btn1"onclick="GetCRN1()">GetCRN</button></td>
 		<td id="crn"> </td>
 	</tr>
 	<tr>
-		<td><button id="#btn2"onclick="SendDigits2_2()">Send Digits</button></td>
+		<td><button id="btn2"onclick="SendDigits2_2()">Send Digits</button></td>
 		<td></td>
 	</tr>
 	<tr>
-		<td><button id="#btn3"onclick="GoSecure3()">GoSecure</button></td>
+		<td><button id="btn3"onclick="GoSecure3()">GoSecure</button></td>
 		<td id="endpiont">  </td>
 	</tr>
 	<tr>
-		<td><button id="#btn4"onclick="GetDigits4()">GetDigits</button></td>
+		<td><button id="btn4"onclick="GetDigits4()">GetDigits</button></td>
 		<td id="captureStatus">  </td>
 	</tr>
 
 </table>
 
-<table id = #tbl3>
+<table id = tbl3>
 	<tr>
 		<td>Amount            $</td>
-		<td><input id="#RequestedAmount" name="RequestedAmount" type="text" value="1000.00"></td>
+		<td><input id="RequestedAmount" name="RequestedAmount" type="text" value="1000.00"></td>
 	</tr>
 	<tr>
 		<td>Expiry Date</td>
-		<td><input id="#ExpiryDate" name="ExpiryDate" type="text" value="05/2024"></td>
+		<td><input id="ExpiryDate" name="ExpiryDate" type="text" value="05/2024"></td>
 	</tr>
 	<tr>
-		<td><button id="#btn5" onclick="Purchase5()">Purchase</button></td>
+		<td><button id="btn5" onclick="Purchase5()">Purchase</button></td>
 		<td></td>
 	</tr>
 </table>
 
-<table id = #tbl4>
+<table id = tbl4>
 	<tr>
-		<td>Trannsaction Status</td>
+		<td>Transaction Status    </td>
 		<td id="paymentstatus">   </td>
 	</tr>
 	<tr>
-		<td>TransactionID</td>
+		<td>TransactionID         </td>
 		<td id="transid">   </td>
 	</tr>
 </table>
 
-
+<button id="btn9"onclick="myfunc()">Test</button>
 
 <body>
 <script>
 
-const btn5 = document.getElementById('#btn5');
-//btn5.style.display = 'none';
-const btn4 = document.getElementById('#btn4');
+const btn9 = document.getElementById('btn9');
+btn9.style.display = 'none';
+const btn4 = document.getElementById('btn4');
 btn4.style.display = 'none';
-const btn3 = document.getElementById('#btn3');
+const btn3 = document.getElementById('btn3');
 btn3.style.display = 'none';
-const btn2 = document.getElementById('#btn2');
+const btn2 = document.getElementById('btn2');
 btn2.style.display = 'none';
-const tbl1 = document.getElementById('#tbl1');
+const tbl1 = document.getElementById('tbl1');
 tbl1.style.display = 'none';
-const tbl3 = document.getElementById('#tbl3');
+const tbl3 = document.getElementById('tbl3');
 tbl3.style.display = 'none';
-const tbl4 = document.getElementById('#tbl4');
+const tbl4 = document.getElementById('tbl4');
 tbl4.style.display = 'none';
 
-//<button id="#btn9"onclick="myfunc()">Test</button>
 
 function myfunc() {
 	tbl1.style.display = 'block';
 	document.querySelector("#panMasked").innerText = 'werty'
 	document.querySelector("#captureStatus").innerText = '4242.'
 	document.querySelector("#ccvMasked").innerText = '4242.'
-
+	temp1 = document.getElementById('ccvMasked')
+	temp1.innerText = "test"
 	}
 
 
@@ -244,10 +244,6 @@ function GoSecure3() {
 			if (endpiont.length > 3) {AllSecure()}
 			else {NotSecure()}
 			console.log(endpiont)
-			//document.querySelector("#crn").innerText = dtmf
-			//document.querySelector("#sessionid").innerText = sessionid
-			//document.querySelector("#endpiont").innerText = endpiont
-		
 		})
 		.catch(err => console.log('Request Failed Step 4'));
 	}
@@ -279,7 +275,6 @@ function GoSecure3() {
 		.then(response => response.json())
 		.then(data => {
 			tbl1.style.display = 'block'
-			console.log('Step5')
 			captureStatus = data.APIData.captureStatus
 			panMask = data.APIData.panMask
 			cvcMask = data.APIData.cvcMask
@@ -296,6 +291,7 @@ function GoSecure3() {
 
 	function Carddone() {
 		tbl3.style.display = 'block'
+		document.querySelector("#secure").innerText = "Card Capture Complete"
 
 	}
 
@@ -339,6 +335,7 @@ function GoSecure3() {
 		document.querySelector("#transid").innerText = TransactionID
 		document.querySelector("#paymentstatus").innerText = APIResponseMessage
 		tbl3.style.display = 'none'
+		ClearSecure() 
 	}
  
  
