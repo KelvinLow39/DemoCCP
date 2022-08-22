@@ -3,6 +3,67 @@
 <head>
 <style>
 
+.button-21 {
+  align-items: center;
+  appearance: none;
+  background-color: #3EB2FD;
+  background-image: linear-gradient(1deg, #4F58FD, #149BF3 99%);
+  background-size: calc(100% + 20px) calc(100% + 20px);
+  border-radius: 100px;
+  border-width: 0;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: CircularStd,sans-serif;
+  font-size: 12px;
+  height: auto;
+  justify-content: center;
+  line-height: 1.5;
+  padding: 4px 20px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color .2s,background-position .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.button-21:active,
+.button-21:focus {
+  outline: none;
+}
+
+.button-21:hover {
+  background-position: -20px -20px;
+}
+
+.button-21:focus:not(:active) {
+  box-shadow: rgba(40, 170, 255, 0.25) 0 0 0 .125em;
+}
+
+
+.mytext{
+  align-items: center;
+  color: #000000;
+  display: inline-flex;
+  font-family: CircularStd,sans-serif;
+  font-size: 12px;
+  height: auto;
+  justify-content: left;
+  line-height: 1.5;
+  width:80px;
+  padding: 0px 10px;
+  position: relative;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
 .hidearea{
 	display:none	
 }
@@ -23,63 +84,63 @@
 
 <table id="tbl1">
 	<tr>
-		<td>Card Number</td>
-		<td id="panMasked">   </td>
+		<td class="mytext">Card Number</td>
+		<td class="mytext" id="panMasked">   </td>
 	</tr>
 	<tr>
-		<td>Card CCV</td>
-		<td id="ccvMasked">   </td>
+		<td class="mytext">Card CCV</td>
+		<td class="mytext" id="ccvMasked">   </td>
 	</tr>
 </table>
 
 
 <table>
 	<tr>
-		<td><button id="btn1"onclick="GetCRN1()">GetCRN</button></td>
+		<td><button class="button-21" button id="btn1"onclick="GetCRN1()">GetCRN</button></td>
 		<td id="crn"> </td>
 	</tr>
 	<tr>
-		<td><button id="btn2"onclick="SendDigits2_0()">Send Digits</button></td>
+		<td><button class="button-21" button id="btn2"onclick="SendDigits2_0()">Send Digits</button></td>
 		<td></td>
 	</tr>
 	<tr>
-		<td><button id="btn3"onclick="GoSecure3()">GoSecure</button></td>
+		<td><button class="button-21" button id="btn3"onclick="GoSecure3()">GoSecure</button></td>
 		<td id="endpiont">  </td>
 	</tr>
 	<tr>
-		<td><button id="btn4"onclick="GetDigits4()">GetDigits</button></td>
-		<td id="captureStatus">  </td>
+		<td><button class="button-21" button id="btn4"onclick="GetDigits4()">GetDigits</button></td>
+		<td class="mytext"id="captureStatus">  </td>
 	</tr>
 
 </table>
 
 <table id = tbl3>
 	<tr>
-		<td>Amount            $</td>
-		<td><input id="RequestedAmount" name="RequestedAmount" type="text" value="1000.00"></td>
+		<td class="mytext">Amount &nbsp;&nbsp;&nbsp;$</td>
+		<td class="mytext"><input id="RequestedAmount" class="mytext" name="RequestedAmount" type="text" value="1000.00"></td>
 	</tr>
 	<tr>
-		<td>Expiry Date</td>
-		<td><input id="ExpiryDate" name="ExpiryDate" type="text" value="05/2024"></td>
+		<td class="mytext">Expiry Date</td>
+		<td class="mytext"><input id="ExpiryDate" class="mytext" name="ExpiryDate" type="text" value="05/2024"></td>
 	</tr>
 	<tr>
-		<td><button id="btn5" onclick="Purchase5()">Purchase</button></td>
+		<td><button class="button-21" button id="btn5" onclick="Purchase5()">Purchase</button></td>
 		<td></td>
 	</tr>
 </table>
 
 <table id = tbl4>
 	<tr>
-		<td>Transaction Status    </td>
-		<td id="paymentstatus">   </td>
+		<td class="mytext">Transaction Status</td>
+		<td class="mytext" id="paymentstatus"></td>
 	</tr>
 	<tr>
-		<td>TransactionID         </td>
-		<td id="transid">   </td>
+		<td class="mytext">TransactionID</td>
+		<td class="mytext" id="transid"></td>
 	</tr>
 </table>
 
-<button id="btn9"onclick="myfunc()">Test</button>
+<button class="button-21" id="btn9"onclick="myfunc()">Test</button>
 
 <body>
 <script>
@@ -137,17 +198,11 @@ if(window.location.hash) {
 	var id1 =""
 	var id2 =""
 	var url2 = ""
-	var url3 = "https://sandbox-payments.secureco.co/hpp?BearerToken=9b8ff61f11293f48484ebc99630b7b7f\
-		&SecureCoAccountId=SANDBOX_TESTING_TOKENTYPE_3\
-		&RequestType=semafone&TransactionType=purchase\
-		&SemafoneCrn=34018\
-		&SemafoneSessionID=dpmb-9d7dab40-783e-4120-b69e-19af4e387f9f-49763919\
-		&frameAncestors=http://127.0.0.1:8080/"		
-
 
 	const myHeaders = new Headers();
 	myHeaders.append('Content-Type', 'application/json');
 	myHeaders.append('Authorization', 'bearer ' + token);
+
 	const myHeaders2 = new Headers();
 	myHeaders2.append('Content-Type', 'application/json');
 	myHeaders2.append('Authorization', 'bearer cc9f2f50aeb36434558cc7cea0f510b3');
@@ -347,25 +402,6 @@ function GoSecure3() {
 	}
  
  
-/*
-	function myFunction() {
-  		var x = document.querySelector('.PurchaseControl');
-  		x.classList.replace('PurchaseControl', 'showarea');
- 		if (x.style.display === 'block') {
-		  x.style.display = 'none';
- 		} 
-		else {
- 		   x.style.display = 'block';
- 		}
-	}
-
-	function toShow() {
-		var iframe = document.getElementsByName('CCP');
-		iframe.style.display = 'block';
-		content.innerHTML = iframe;
-	}
-	*/
-
 
 </script>
 </body>
