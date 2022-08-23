@@ -56,8 +56,8 @@
   height: auto;
   justify-content: left;
   line-height: 1.5;
-  width:80px;
-  padding: 0px 10px;
+  width:110px;
+  padding: 0px 3px;
   position: relative;
   text-align: left;
   vertical-align: top;
@@ -104,7 +104,7 @@
 		<td></td>
 	</tr>
 	<tr>
-		<td><button class="button-21" button id="btn3"onclick="GoSecure3()">GoSecure</button></td>
+		<td><button class="button-21" button id="btn3"onclick="GoSecure3()">CheckSecure</button></td>
 		<td id="endpiont">  </td>
 	</tr>
 	<tr>
@@ -239,9 +239,10 @@ function GetCRN1() {
 			sessionid1 = data.APIData.SessionId
 			theCRN = data.APIData
 			console.log(theCRN)
-			document.querySelector("#crn").innerText = dtmf
-			btn2.style.display = 'block';
+			//document.querySelector("#crn").innerText = dtmf
+			//btn2.style.display = 'block';
 			//myFunction();
+			tbl4.style.display = 'none';
 			SendDigits2_0()
 
 			})
@@ -316,15 +317,17 @@ function GoSecure3() {
 	function AllSecure() 	{
 		document.querySelector("#secure").innerText = "ALL SECURE ENTER CREDIT CARD DIGITS"
 		document.querySelector("#notsecure").innerText = ""
-		btn4.style.display = 'block'
+		btn1.style.display = 'none'
+		tbl1.style.display = 'block'
+		console.log('Awaiting Digts')
 		//wait(2000);
 		//console.log('Start loop')
-		//GetDigits4_2()
+		GetDigits4_2()
 	}
 	function NotSecure()  	{
 		document.querySelector("#notsecure").innerText = "NOT SECURE"
 		document.querySelector("#secure").innerText = ""
-		btn3.style.display = 'block'
+		//btn3.style.display = 'block'
 	}
 	function ClearSecure()  {
 		document.querySelector("#notsecure").innerText = ""
@@ -338,7 +341,7 @@ function GoSecure3() {
 	function GetDigits4_2() {
 		url5 = "https://sandboxapi.secureco.co/V2/semafone/getsecurecarddetails"
 		//while (captureStatus !== 'COMPLETE') {
-			
+			console.log('Sending Post GetDigits')
 			counter = counter +1
 			console.log(counter)
 			//if(counter > 10) {break}
@@ -351,19 +354,18 @@ function GoSecure3() {
 				})
 				.then(response => response.json())
 				.then(data => {
-					//tbl1.style.display = 'block'
 					captureStatus = data.APIData.captureStatus
 					panMask = data.APIData.panMask
 					cvcMask = data.APIData.cvcMask
 					document.querySelector("#panMasked").innerText = panMask
 					document.querySelector("#ccvMasked").innerText = cvcMask
-					document.querySelector("#captureStatus").innerText = captureStatus
+					//document.querySelector("#captureStatus").innerText = captureStatus
 					console.log(captureStatus)
 					console.log(panMask)
 
 					if (captureStatus === 'COMPLETE') {Carddone()}
-					else {wait(1500);GetDigits4_2()}
-					if (counter >60  === 'COMPLETE') {timedout()}
+					else {wait(500);GetDigits4_2()}
+					if (counter > 100 ) {timedout()}
 		})
 		.catch(err => console.log('Request Failed getDigits'));
 	//}
@@ -372,7 +374,7 @@ function GoSecure3() {
 
 	function timedout() {
 
-		document.querySelector("#secure").innerText = "Capture Timed Out"	
+		document.querySelector("#notsecure").innerText = "Capture Timed Out"	
 	}
 
 
@@ -419,10 +421,12 @@ function GoSecure3() {
 	function purchasedone() {
 		tbl4.style.display = 'block'
 		tbl1.style.display = 'none'
+		document.querySelector("#secure").innerText = "Payment Complete"
 		document.querySelector("#transid").innerText = TransactionID
 		document.querySelector("#paymentstatus").innerText = APIResponseMessage
 		tbl3.style.display = 'none'
-		ClearSecure() 
+
+		//ClearSecure() 
 	}
  
  
