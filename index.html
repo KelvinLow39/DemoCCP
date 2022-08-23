@@ -96,7 +96,7 @@
 
 <table>
 	<tr>
-		<td><button class="button-21" button id="btn1"onclick="GetCRN1()">GetCRN</button></td>
+		<td><button class="button-21" button id="btn1"onclick="GetCRN1()">Go Secure</button></td>
 		<td id="crn"> </td>
 	</tr>
 	<tr>
@@ -108,7 +108,7 @@
 		<td id="endpiont">  </td>
 	</tr>
 	<tr>
-		<td><button class="button-21" button id="btn4"onclick="GetDigits4()">GetDigits</button></td>
+		<td><button class="button-21" button id="btn4"onclick="GetDigits4_2()">GetDigits</button></td>
 		<td class="mytext"id="captureStatus">  </td>
 	</tr>
 
@@ -163,7 +163,9 @@ var dtmf = "99999"
 var sessionid1 = "999999"
 var sessionid = "999999"
 var GetCRN = ""
-var endpiont = "999999"
+var endpiont = "9"
+var captureStatus = "99"
+var panMask = "**"
 
 
 
@@ -240,6 +242,7 @@ function GetCRN1() {
 			document.querySelector("#crn").innerText = dtmf
 			btn2.style.display = 'block';
 			//myFunction();
+			SendDigits2_0()
 
 			})
 		.catch(err => console.log('Request Failed GetCRNStep3')); 
@@ -278,17 +281,16 @@ function SendDigits2_1() {
 		.then(response => response.json())
 		.then(data => {
 			console.log('{"digits": "##' + dtmf + '"}')
-			wait(3000);  //7 seconds in milliseconds
-			btn3.style.display = 'block';
+			wait(4000);  //7 seconds in milliseconds
+			console.log('{"digits": "##' + dtmf + '"}')
+			//btn3.style.display = 'block';
+			GoSecure3()
 		})
 		.catch(err => console.log('Request Failed Send DTMF')); 
 
 }
 
 
-function SendDigits2_2() {
-		btn3.style.display = 'block';
-	}
 
 function GoSecure3() {
 	url4 = "https://sandboxapi.secureco.co/V2/semafone/getsecuresession"
@@ -300,24 +302,29 @@ function GoSecure3() {
 		})
 		.then(response => response.json())
 		.then(data => {
-			console.log('Step4')
+			console.log('GoSecure3')
 			endpiont = data.APIData.endPoint
 			sessionid = data.APIData.sessionId
-			if (endpiont.length > 3) {AllSecure()}
-			else {NotSecure()}
 			console.log(endpiont)
+			if (endpiont.length > 10) {AllSecure()}
+			else {NotSecure()}
+				
 		})
-		.catch(err => console.log('Request Failed Step 4'));
+		.catch(err => console.log('Request Failed GoSecure3'));
 	}
 
 	function AllSecure() 	{
 		document.querySelector("#secure").innerText = "ALL SECURE ENTER CREDIT CARD DIGITS"
 		document.querySelector("#notsecure").innerText = ""
 		btn4.style.display = 'block'
+		//wait(2000);
+		//console.log('Start loop')
+		//GetDigits4_2()
 	}
 	function NotSecure()  	{
 		document.querySelector("#notsecure").innerText = "NOT SECURE"
 		document.querySelector("#secure").innerText = ""
+		btn3.style.display = 'block'
 	}
 	function ClearSecure()  {
 		document.querySelector("#notsecure").innerText = ""
@@ -326,35 +333,52 @@ function GoSecure3() {
 
 
 
-	function GetDigits4() {
-	url5 = "https://sandboxapi.secureco.co/V2/semafone/getsecurecarddetails"
-	let obj5 = fetch(url5, {
-		method: 'POST',
-		body: "{crNumber : \'" + dtmf + "\', sessionId: \'" + sessionid + "\', endPoint: \'" + endpiont + "\'}",
-		origin: 'http://127.0.0.1:8080',
-		headers: myHeaders2,
-		})
-		.then(response => response.json())
-		.then(data => {
-			tbl1.style.display = 'block'
-			captureStatus = data.APIData.captureStatus
-			panMask = data.APIData.panMask
-			cvcMask = data.APIData.cvcMask
-			document.querySelector("#panMasked").innerText = panMask
-			document.querySelector("#ccvMasked").innerText = cvcMask
-			document.querySelector("#captureStatus").innerText = captureStatus
-			console.log(captureStatus)
-			console.log(panMask)
-			if (captureStatus === 'COMPLETE') {Carddone()}
+
+	let counter = 1
+	function GetDigits4_2() {
+		url5 = "https://sandboxapi.secureco.co/V2/semafone/getsecurecarddetails"
+		//while (captureStatus !== 'COMPLETE') {
 			
+			counter = counter +1
+			console.log(counter)
+			//if(counter > 10) {break}
+			//wait(5000);
+			let obj5 = fetch(url5, {
+				method: 'POST',
+				body: "{crNumber : \'" + dtmf + "\', sessionId: \'" + sessionid + "\', endPoint: \'" + endpiont + "\'}",
+				origin: 'http://127.0.0.1:8080',
+				headers: myHeaders2,
+				})
+				.then(response => response.json())
+				.then(data => {
+					//tbl1.style.display = 'block'
+					captureStatus = data.APIData.captureStatus
+					panMask = data.APIData.panMask
+					cvcMask = data.APIData.cvcMask
+					document.querySelector("#panMasked").innerText = panMask
+					document.querySelector("#ccvMasked").innerText = cvcMask
+					document.querySelector("#captureStatus").innerText = captureStatus
+					console.log(captureStatus)
+					console.log(panMask)
+
+					if (captureStatus === 'COMPLETE') {Carddone()}
+					else {wait(1500);GetDigits4_2()}
+					if (counter >60  === 'COMPLETE') {timedout()}
 		})
 		.catch(err => console.log('Request Failed getDigits'));
+	//}
+}
+
+
+	function timedout() {
+
+		document.querySelector("#secure").innerText = "Capture Timed Out"	
 	}
+
 
 	function Carddone() {
 		tbl3.style.display = 'block'
 		document.querySelector("#secure").innerText = "Card Capture Complete"
-
 	}
 
 
