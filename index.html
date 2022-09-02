@@ -97,7 +97,7 @@
 <table>
 	<tr>
 		<td><button class="button-21" button id="btn1"onclick="GetCRN1()">Go Secure</button></td>
-		<td id="crn"> </td>
+		<td><button class="button-21" button id="btn6"onclick="getlink1()">Omni Payment</button></td>
 	</tr>
 	<tr>
 		<td><button class="button-21" button id="btn2"onclick="SendDigits2_0()">Send Digits</button></td>
@@ -140,6 +140,37 @@
 	</tr>
 </table>
 
+<table id = tbl5>
+	<tr>
+		<td class="mytext">Amount &nbsp;&nbsp;&nbsp;$</td>
+		<td class="mytext"><input id="RequestedAmount" class="mytext" name="RequestedAmount" type="text" value="1000.00"></td>
+	</tr>
+	<tr>
+		<td class="mytext">Reference Number</td>
+		<td class="mytext"><input id="RefNum" class="mytext" name="RefNum" type="text" value="Order-ABC123"></td>
+	</tr>
+	<tr>
+		<td class="mytext">Mobile Number</td>
+		<td class="mytext"><input id="MobNumber" class="mytext" name="MobNumber" type="text" value="+61416275769"></td>
+	</tr>
+	<tr>
+		<td><button class="button-21" button id="btn7" onclick="getlink2()">Send SMS</button></td>
+		<td></td>
+	</tr>
+</table>
+<table id = tbl6>
+	<tr>
+		<td class="mytext">SMS Sent</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td><button class="button-21" button id="btn8" onclick="getlink4()">Check Payment</button></td>
+		<td></td>
+	</tr>
+</table>
+
+
+
 <button class="button-21" id="btn9"onclick="myfunc()">Test</button>
 
 <body>
@@ -159,6 +190,8 @@ const tbl3 = document.getElementById('tbl3');
 tbl3.style.display = 'none';
 const tbl4 = document.getElementById('tbl4');
 tbl4.style.display = 'none';
+tbl5.style.display = 'none';
+tbl6.style.display = 'none';
 var dtmf = "99999"
 var sessionid1 = "999999"
 var sessionid = "999999"
@@ -429,7 +462,75 @@ function GoSecure3() {
 		//ClearSecure() 
 	}
  
+	function getlink1() {
+		tbl5.style.display = 'block'
+		//ClearSecure() 
+	}
+
+	function getlink2() {
+	url6 = "https://sandboxapi.secureco.co/V2/paymentlink"
+	tbl5.style.display = 'none'
+	let obj6 = fetch(url6, {
+		method: 'POST',
+		body: '{ "SecureCoAccountId": "SANDBOX_TESTING_TOKENTYPE_3","OrderNumber": "ORD-01","FirstName": "Kel",\
+		"LastName": "Low","AgentID": "JohnDoe","RequestedAmount": "1550","Currency": "AUD","TransactionType": "purchase"}',
+		origin: 'http://127.0.0.1:8080',
+		headers: myHeaders2,
+		})
+		.then(response => response.json())
+		.then(data => {
+			shorturl = data.ShortURL
+			requestid = data.RequestID
+			console.log(shorturl)
+			console.log(requestid)
+			getlink3()
+		})
+		.catch(err => console.log('Request Failed getlink'));
+	}
  
+
+	function getlink3() {
+	var MobNumber = document.getElementById("MobNumber");
+	url6 = "https://sandboxapi.secureco.co/V2/message/send"
+	let obj6 = fetch(url6, {
+		method: 'POST',
+		body: '{"MobileNumber": "+61416275769", \
+		"Message": "' + shorturl + '", \
+		"SecureCoAccountId": "EGateSIMAccount"}',
+		origin: 'http://127.0.0.1:8080',
+		headers: myHeaders2,
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log(data.APIResponseMessage)
+			tbl6.style.display = 'block'
+		})
+		.catch(err => console.log('Request Failed getlink'));
+	}
+
+
+	function getlink4() {
+	var MobNumber = document.getElementById("MobNumber");
+	url6 = 'https://sandboxapi.secureco.co/V2/Transactions/query?merchantaccountid=SANDBOX_TESTING_TOKENTYPE_3&requestID='+ requestid 
+	let obj6 = fetch(url6, {
+		method: 'GET',
+		headers: myHeaders2,
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log(data.APIData.TransactionResponse[0].TransactionResponseMessage)
+			APIResponseMessage = data.APIResponseMessage
+			if (APIResponseMessage == 'Success'){
+				tbl6.style.display = 'none'
+				document.querySelector("#secure").innerText = "Transaction Approved"
+				document.querySelector("#notsecure").innerText = ""				
+			}
+			else {document.querySelector("#notsecure").innerText = "waiting approval"}
+		})
+		.catch(err => console.log('Request Failed getlink4'));
+	}
+
+
 
 </script>
 </body>
