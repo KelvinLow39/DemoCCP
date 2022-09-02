@@ -96,7 +96,7 @@
 
 <table>
 	<tr>
-		<td><button class="button-21" button id="btn1"onclick="GetCRN1()">Go Secure</button></td>
+		<td><button class="button-21" button id="btn1"onclick="GetCRN1()">Agent Payment</button></td>
 		<td><button class="button-21" button id="btn6"onclick="getlink1()">Omni Payment</button></td>
 	</tr>
 	<tr>
@@ -143,7 +143,7 @@
 <table id = tbl5>
 	<tr>
 		<td class="mytext">Amount &nbsp;&nbsp;&nbsp;$</td>
-		<td class="mytext"><input id="RequestedAmount" class="mytext" name="RequestedAmount" type="text" value="1000.00"></td>
+		<td class="mytext"><input id="OmniRequestedAmount" class="mytext" name="RequestedAmount" type="text" value="1000.00"></td>
 	</tr>
 	<tr>
 		<td class="mytext">Reference Number</td>
@@ -468,12 +468,18 @@ function GoSecure3() {
 	}
 
 	function getlink2() {
+	OmniRequestedAmount = document.getElementById("OmniRequestedAmount").value
+	OmniRequestedAmount = OmniRequestedAmount.replace(".", "");
+	console.log(OmniRequestedAmount)
+
 	url6 = "https://sandboxapi.secureco.co/V2/paymentlink"
 	tbl5.style.display = 'none'
 	let obj6 = fetch(url6, {
 		method: 'POST',
-		body: '{ "SecureCoAccountId": "SANDBOX_TESTING_TOKENTYPE_3","OrderNumber": "ORD-01","FirstName": "Kel",\
-		"LastName": "Low","AgentID": "JohnDoe","RequestedAmount": "1550","Currency": "AUD","TransactionType": "purchase"}',
+		body: '{ "SecureCoAccountId": "SANDBOX_TESTING_TOKENTYPE_3","OrderNumber": "ORD-01", \
+		"FirstName": "Kel","LastName": "Low","AgentID": "JohnDoe", \
+		"RequestedAmount": "' + OmniRequestedAmount + '", \
+		"Currency": "AUD","TransactionType": "purchase"}',
 		origin: 'http://127.0.0.1:8080',
 		headers: myHeaders2,
 		})
@@ -490,11 +496,12 @@ function GoSecure3() {
  
 
 	function getlink3() {
-	var MobNumber = document.getElementById("MobNumber");
+	var MobNumber = document.getElementById("MobNumber").value
+	console.log(MobNumber)
 	url6 = "https://sandboxapi.secureco.co/V2/message/send"
 	let obj6 = fetch(url6, {
 		method: 'POST',
-		body: '{"MobileNumber": "+61416275769", \
+		body: '{"MobileNumber": "' + MobNumber + '", \
 		"Message": "' + shorturl + '", \
 		"SecureCoAccountId": "EGateSIMAccount"}',
 		origin: 'http://127.0.0.1:8080',
@@ -510,7 +517,6 @@ function GoSecure3() {
 
 
 	function getlink4() {
-	var MobNumber = document.getElementById("MobNumber");
 	url6 = 'https://sandboxapi.secureco.co/V2/Transactions/query?merchantaccountid=SANDBOX_TESTING_TOKENTYPE_3&requestID='+ requestid 
 	let obj6 = fetch(url6, {
 		method: 'GET',
